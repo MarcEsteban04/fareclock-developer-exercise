@@ -1,0 +1,10 @@
+# App Engine configuration (optional, for App Engine deployment)
+# This is primarily for Cloud Run, but included for reference
+
+runtime: python311
+
+env_variables:
+  GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+  ENVIRONMENT: production
+  PORT: 8080
+
