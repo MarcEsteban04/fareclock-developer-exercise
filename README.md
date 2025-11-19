@@ -226,11 +226,3 @@ Swagger UI is available at [`/docs`](https://fareclock-backend-1037267129816.us-
 │   └── .env.example
 └── README.md (this file)
 
-## 🪄 Next Steps
-
-1. Wire up Auth (e.g., Clerk or Firebase Auth) for role-based access.
-2. Add worker photos/contact info and show them in tooltips for richer context.
-3. Automate scheduled nightly backups of Datastore entities via Cloud Scheduler + Cloud Functions.
-
-> Have an idea or see something off? Open an issue or ping the maintainer—continuous improvement is welcome!
-
