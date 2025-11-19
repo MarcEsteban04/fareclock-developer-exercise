@@ -169,15 +169,4 @@ firebase deploy --only hosting
 │   ├── vite.config.ts / vitest.config.ts
 │   └── .env.example
 └── README.md (this file)
-```
-
-## 🤝 Contributing / Maintenance Notes
-
-- When updating the backend, rerun `pytest` locally and redeploy via Cloud Build.
-- When updating the frontend, ensure `npm run test:run` and `npm run build` pass before `firebase deploy`.
-- For new environments, adjust `CORS_ORIGINS` and `.env` files accordingly.
-
----
-
-**Enjoy scheduling with Fareclock!** Feel free to open issues or reach out for enhancements.
 
