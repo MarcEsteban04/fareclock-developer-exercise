@@ -1,35 +1,30 @@
 <div align="center">
 
-# Fareclock — Shift Planner
+# Fareclock – Shift Planner
 
-![Cloud Run](https://img.shields.io/badge/Backend-Google%20Cloud%20Run-4285F4?logo=googlecloud&logoColor=white)
-![Firebase Hosting](https://img.shields.io/badge/Frontend-Firebase%20Hosting-FFCA28?logo=firebase&logoColor=white)
-![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
-![Vue](https://img.shields.io/badge/UI-Vue%203-42B883?logo=vue.js&logoColor=white)
-
-> A full-stack scheduling experience for high-volume shift operations. Built with FastAPI + Datastore on the backend, Vue 3 + Vite on the frontend, fully deployed to Google Cloud.
+A simple and fast way to manage workers and shifts. The backend runs on FastAPI, the frontend is Vue 3, both deployed on Google Cloud.
 
 </div>
 
-## 🧭 Table of Contents
+## Table of Contents
 
-1. [Live URLs](#-live-urls)
-2. [Requirement Coverage](#-requirement-coverage)
-3. [Architecture Snapshot](#-architecture-snapshot)
-4. [Feature Highlights](#-feature-highlights)
-5. [Tech Stack](#-tech-stack)
-6. [Getting Started](#-getting-started)
-7. [Testing](#-testing)
-8. [Production Deployment](#-production-deployment)
-9. [Smoke-Test Checklist](#-smoke-test-checklist)
-10. [Data Model](#-data-model)
-11. [API Overview](#-api-overview)
-12. [Monitoring & Ops](#-monitoring--ops)
-13. [Extra Touches](#-extra-touches)
-14. [Repository Layout](#-repository-layout)
-15. [Next Steps](#-next-steps)
+1. [Live URLs](#live-urls)
+2. [Requirement Coverage](#requirement-coverage)
+3. [Architecture Snapshot](#architecture-snapshot)
+4. [Feature Highlights](#feature-highlights)
+5. [Tech Stack](#tech-stack)
+6. [Getting Started](#getting-started)
+7. [Testing](#testing)
+8. [Production Deployment](#production-deployment)
+9. [Smoke-Test Checklist](#smoke-test-checklist)
+10. [Data Model](#data-model)
+11. [API Overview](#api-overview)
+12. [Monitoring & Ops](#monitoring--ops)
+13. [Extra Touches](#extra-touches)
+14. [Repository Layout](#repository-layout)
+15. [Next Steps](#next-steps)
 
-## 🌐 Live URLs
+## Live URLs
 
 | Layer | URL |
 | --- | --- |
@@ -37,17 +32,17 @@
 | **Backend (Cloud Run)** | https://fareclock-backend-1037267129816.us-central1.run.app |
 | **OpenAPI Docs** | `https://fareclock-backend-1037267129816.us-central1.run.app/docs` |
 
-## ✅ Requirement Coverage
+## Requirement Coverage
 
-- **Timezones:** Dedicated endpoint to read/update preferred IANA timezone; existing shifts re-render using the saved zone.
-- **Workers CRUD:** Name-only workers with full REST semantics + validation tests.
-- **Shift CRUD:** ISO-8601 datetimes, automatic duration computation, overlap + 12h max enforcement, per-worker filters.
-- **Datastore persistence:** Google Cloud Datastore (Firestore in Datastore mode) accessed via the official Python client.
-- **Cloud Run + Firebase Hosting:** Automated Docker build/deploy pipeline (Cloud Build) and Firebase Hosting for the Vue app.
-- **Responsive Vue UI:** Desktop/mobile friendly layout, timezone-aware formatting, analytics strip, shift timeline, contextual alerts.
-- **Automated tests:** Pytest suite for all endpoints, Vitest unit tests for date utilities.
+- **Timezones:** We have a special page to change your preferred timezone. When you change it, all dates and times on the page will update.
+- **Workers:** You can add, remove, and change worker names. We make sure that each worker has a unique name.
+- **Shifts:** You can add, remove, and change shifts. We automatically calculate the shift duration and make sure that shifts don't overlap and are not too long.
+- **Datastore:** We store all data in Google Cloud Datastore.
+- **Cloud Run + Firebase Hosting:** We use Cloud Run and Firebase Hosting to deploy our app.
+- **Responsive Vue UI:** Our app works well on desktop, tablet, and phone. We show dates and times in your preferred timezone.
+- **Automated tests:** We have tests to make sure that our app works correctly.
 
-## 🧱 Architecture Snapshot
+## Architecture Snapshot
 
 ```
 ┌────────────┐      REST over TLS      ┌──────────────┐
@@ -58,20 +53,20 @@
        └────────────── CDN/HTTPS ─────────────┘ Cloud Firestore (Datastore Mode)
 ```
 
-## ✨ Feature Highlights
+## Feature Highlights
 
-- 🔄 **Timezone-aware engine** – one toggle updates every date/time display across the app instantly.
-- ⚡ **Realtime validations** – inline duration preview and rule hints before submitting shifts.
-- 🧠 **Contextual analytics** – total hours, workers on duty today, and next shift at a glance.
-- 📱 **Responsive surface** – optimized layout for desktop dashboards and tablet/mobile touchpoints.
+- One timezone switch updates every date/time on the page.
+- Shift dialog shows live duration and warns before you save.
+- Analytics chips highlight total hours, workers on duty today, and the next shift.
+- Layout works on desktop, tablet, and phone.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend:** FastAPI, Pydantic v2, Google Cloud Datastore client, pytest.
 - **Frontend:** Vue 3 + TypeScript, Vite, Tailwind-based UI components, Vitest.
 - **Infra / Tooling:** Docker, Cloud Build, Cloud Run, Firebase Hosting, gcloud CLI, Firebase CLI.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Prerequisites
 
@@ -120,7 +115,7 @@ gcloud beta emulators datastore start --project=$GCP_PROJECT_ID --host-port=loca
 uvicorn app.main:app --reload --port 8080
 ```
 
-> The API will be available at `http://localhost:8080`. Swagger docs live at `/docs`.
+> API runs at `http://localhost:8080` and docs live at `/docs`.
 
 ### 5. Frontend — Local Development
 
@@ -130,16 +125,16 @@ npm install
 npm run dev  # launches Vite dev server on http://localhost:5173
 ```
 
-## 🧪 Testing
+## Testing
 
 | Layer | Command | Notes |
 | --- | --- | --- |
-| Backend | `cd backend && pytest` | Uses FastAPI TestClient + Datastore emulator fixtures. |
-| Frontend | `cd frontend && npm run test:run` | Vitest unit tests for date/zone helpers. |
+| Backend | `cd backend && pytest` | Uses TestClient and Datastore emulator. |
+| Frontend | `cd frontend && npm run test:run` | Vitest checks date/time helpers. |
 
-> Tip: add `--maxfail=1 -q` to Pytest for faster red/green feedback.
+> Tip: add `--maxfail=1 -q` to Pytest for quicker feedback.
 
-## 📦 Production Deployment
+## Production Deployment
 
 ### Backend → Cloud Run
 
@@ -166,7 +161,7 @@ firebase use prod    # alias pointing to fc-itw-esteban
 firebase deploy --only hosting
 ```
 
-## 🔍 Smoke-Test Checklist
+## Smoke-Test Checklist
 
 1. **Workers:** Create, rename, and delete entries. Confirm toast/alerts render and table refreshes.
 2. **Shifts:** Add 1–2 shifts per worker, verify duration preview, ensure overlap/12h guards show inline warnings.
@@ -174,7 +169,7 @@ firebase deploy --only hosting
 4. **API Health:** `curl https://fareclock-backend-1037267129816.us-central1.run.app/health` should return `{"status": "healthy"}`.
 5. **Cross-Origin:** Confirm Firebase-hosted UI loads data without “Failed to fetch” errors (CORS allowlist includes both hosting domains).
 
-## 🗂 Data Model
+## Data Model
 
 | Entity | Key Fields | Notes |
 | --- | --- | --- |
@@ -182,7 +177,7 @@ firebase deploy --only hosting
 | `Worker` | `id`, `name` | minimal profile; name is unique-enforced in UI. |
 | `Shift` | `id`, `worker_id`, `start`, `end`, `duration` | duration computed server-side; `start`/`end` stored as ISO 8601 UTC and formatted per preference. |
 
-## 📡 API Overview
+## API Overview
 
 | Method | Path | Description |
 | --- | --- | --- |
@@ -197,20 +192,20 @@ firebase deploy --only hosting
 
 Swagger UI is available at [`/docs`](https://fareclock-backend-1037267129816.us-central1.run.app/docs) for interactive exploration.
 
-## 🛡 Monitoring & Ops
+## Monitoring & Ops
 
 - **Health check:** `GET /health` responds with `{ "status": "healthy" }` for uptime probes.
 - **Cloud Logging:** All Cloud Run stdout/stderr is forwarded to Google Cloud Logging with labels for version + region.
 - **Alerting suggestion:** add a Cloud Monitoring alert on 5xx rate or latency to catch regressions early.
 
-## ✨ Extra Touches
+## Extra Touches
 
 - Analytics strip summarizing total scheduled hours, workers on duty today, and the next shift.
 - Mini timeline visualization for upcoming shifts.
 - Inline duration preview + warning list in the shift dialog (overlaps, >12h, end-before-start).
 - Custom modal confirmations and success banners replacing browser alerts/toasts.
 
-## 📄 Repository Layout
+## Repository Layout
 
 ```
 ├── backend/
