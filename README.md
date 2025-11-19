@@ -11,6 +11,24 @@
 
 </div>
 
+## 🧭 Table of Contents
+
+1. [Live URLs](#-live-urls)
+2. [Requirement Coverage](#-requirement-coverage)
+3. [Architecture Snapshot](#-architecture-snapshot)
+4. [Feature Highlights](#-feature-highlights)
+5. [Tech Stack](#-tech-stack)
+6. [Getting Started](#-getting-started)
+7. [Testing](#-testing)
+8. [Production Deployment](#-production-deployment)
+9. [Smoke-Test Checklist](#-smoke-test-checklist)
+10. [Data Model](#-data-model)
+11. [API Overview](#-api-overview)
+12. [Monitoring & Ops](#-monitoring--ops)
+13. [Extra Touches](#-extra-touches)
+14. [Repository Layout](#-repository-layout)
+15. [Next Steps](#-next-steps)
+
 ## 🌐 Live URLs
 
 | Layer | URL |
@@ -40,6 +58,13 @@
        └────────────── CDN/HTTPS ─────────────┘ Cloud Firestore (Datastore Mode)
 ```
 
+## ✨ Feature Highlights
+
+- 🔄 **Timezone-aware engine** – one toggle updates every date/time display across the app instantly.
+- ⚡ **Realtime validations** – inline duration preview and rule hints before submitting shifts.
+- 🧠 **Contextual analytics** – total hours, workers on duty today, and next shift at a glance.
+- 📱 **Responsive surface** – optimized layout for desktop dashboards and tablet/mobile touchpoints.
+
 ## 🛠️ Tech Stack
 
 - **Backend:** FastAPI, Pydantic v2, Google Cloud Datastore client, pytest.
@@ -68,7 +93,7 @@ cd fareclock-developer-exercise
 #### Backend (`backend/.env`)
 
 ```
-GCP_PROJECT_ID=fc-itw-esteban
+GCP_PROJECT_ID=fc-itw-esteban          # override per environment
 DATASTORE_EMULATOR_HOST=localhost:8081   # omit in production
 ENVIRONMENT=development
 PORT=8080
@@ -112,6 +137,8 @@ npm run dev  # launches Vite dev server on http://localhost:5173
 | Backend | `cd backend && pytest` | Uses FastAPI TestClient + Datastore emulator fixtures. |
 | Frontend | `cd frontend && npm run test:run` | Vitest unit tests for date/zone helpers. |
 
+> Tip: add `--maxfail=1 -q` to Pytest for faster red/green feedback.
+
 ## 📦 Production Deployment
 
 ### Backend → Cloud Run
@@ -147,6 +174,35 @@ firebase deploy --only hosting
 4. **API Health:** `curl https://fareclock-backend-1037267129816.us-central1.run.app/health` should return `{"status": "healthy"}`.
 5. **Cross-Origin:** Confirm Firebase-hosted UI loads data without “Failed to fetch” errors (CORS allowlist includes both hosting domains).
 
+## 🗂 Data Model
+
+| Entity | Key Fields | Notes |
+| --- | --- | --- |
+| `Timezone` | `timezone` | single record storing preferred IANA string (defaults to `UTC`). |
+| `Worker` | `id`, `name` | minimal profile; name is unique-enforced in UI. |
+| `Shift` | `id`, `worker_id`, `start`, `end`, `duration` | duration computed server-side; `start`/`end` stored as ISO 8601 UTC and formatted per preference. |
+
+## 📡 API Overview
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/timezone` | Retrieve current timezone setting. |
+| `POST` | `/api/timezone` | Update timezone (validates IANA string). |
+| `GET` | `/api/workers` | List all workers. |
+| `POST` | `/api/workers` | Create worker (name required). |
+| `GET/PUT/DELETE` | `/api/workers/{id}` | Read/update/remove a specific worker. |
+| `GET` | `/api/shifts?worker_id=` | List shifts (optionally filter by worker). |
+| `POST` | `/api/shifts` | Create shift (validates overlap & ≤12h). |
+| `GET/PUT/DELETE` | `/api/shifts/{id}` | Read/update/delete shift. |
+
+Swagger UI is available at [`/docs`](https://fareclock-backend-1037267129816.us-central1.run.app/docs) for interactive exploration.
+
+## 🛡 Monitoring & Ops
+
+- **Health check:** `GET /health` responds with `{ "status": "healthy" }` for uptime probes.
+- **Cloud Logging:** All Cloud Run stdout/stderr is forwarded to Google Cloud Logging with labels for version + region.
+- **Alerting suggestion:** add a Cloud Monitoring alert on 5xx rate or latency to catch regressions early.
+
 ## ✨ Extra Touches
 
 - Analytics strip summarizing total scheduled hours, workers on duty today, and the next shift.
@@ -169,4 +225,12 @@ firebase deploy --only hosting
 │   ├── vite.config.ts / vitest.config.ts
 │   └── .env.example
 └── README.md (this file)
+
+## 🪄 Next Steps
+
+1. Wire up Auth (e.g., Clerk or Firebase Auth) for role-based access.
+2. Add worker photos/contact info and show them in tooltips for richer context.
+3. Automate scheduled nightly backups of Datastore entities via Cloud Scheduler + Cloud Functions.
+
+> Have an idea or see something off? Open an issue or ping the maintainer—continuous improvement is welcome!
 
