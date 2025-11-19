@@ -7,7 +7,7 @@
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
 ![Vue](https://img.shields.io/badge/UI-Vue%203-42B883?logo=vue.js&logoColor=white)
 
-> A full-stack scheduling experience for high-volume shift operations. Built with FastAPI + Datastore on the backend, Vue 3 + Vite on the frontend, fully deployed to Google Cloud.
+> Built with FastAPI + Datastore on the backend, Vue 3 + Vite on the frontend, fully deployed to Google Cloud.
 
 </div>
 
